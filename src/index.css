@@ -1,0 +1,341 @@
+﻿@import "tailwindcss";
+
+/* ============================================================
+   91 · Hoja de estilos base
+   Paleta celeste/cian profunda: fondo noche-oceano con texto
+   cian-claro. Estética de bitácora nocturna, sin grises neutros.
+   ============================================================ */
+
+:root {
+  /* Fondo: cian muy oscuro, casi nocturno / océano profundo */
+  --bg: #062033;
+  /* Paneles: un escalón más claro que el fondo para que destaquen */
+  --panel: #0c2c43;
+  --panel-2: #0c2c43;
+  /* Bordes: cian medio, usados con baja opacidad en el markup */
+  --line: #0e7490;
+  /* Texto principal: cian MUY claro, casi blanco */
+  --ink: #ecfeff;
+  /* Texto secundario / labels, un poco más oscuro para jerarquía */
+  --mut: #67e8f9;
+  /* Acentos cian */
+  --cyan: #cffafe;
+  --sky: #38bdf8;
+  --cyan-dark: #155e75;
+  --ice: #a5f3fc;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display {
+  font-family: "Unbounded", "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+.font-mono-gem {
+  font-family: "IBM Plex Mono", ui-monospace, "Cascadia Code", monospace;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.32);
+  color: #062033;
+}
+
+/* Scrollbar discreto (en tonos cian) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0e7490 transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #0e7490;
+  border-radius: 8px;
+}
+
+/* ---------- Fondo ambiental por capas ---------- */
+.gem-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(1100px 600px at 12% -8%, rgba(207, 250, 254, 0.07), transparent 60%),
+    radial-gradient(900px 560px at 92% 108%, rgba(56, 189, 248, 0.07), transparent 60%),
+    radial-gradient(700px 420px at 70% 20%, rgba(165, 243, 252, 0.05), transparent 60%),
+    var(--bg);
+}
+.gem-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(207, 250, 254, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 250, 254, 0.03) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 20%, #000 40%, transparent 100%);
+}
+.gem-bg .drift {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.55;
+  animation: drift 26s ease-in-out infinite alternate;
+}
+.gem-bg .drift-a {
+  width: 480px;
+  height: 480px;
+  left: -140px;
+  top: -160px;
+  background: rgba(56, 189, 248, 0.14);
+}
+.gem-bg .drift-b {
+  width: 420px;
+  height: 420px;
+  right: -120px;
+  bottom: -140px;
+  background: rgba(165, 243, 252, 0.13);
+  animation-delay: -12s;
+}
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(60px, 40px, 0) scale(1.12); }
+}
+
+/* ---------- Animaciones de estado ---------- */
+
+/* Anillo de grabación activa: brillo suave que respira (Botón 1) */
+@keyframes rec-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.45); }
+  70%  { box-shadow: 0 0 0 14px rgba(56, 189, 248, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+.rec-pulse {
+  animation: rec-pulse 1.6s ease-out infinite;
+}
+
+@keyframes dot-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.25; }
+}
+.dot-blink {
+  animation: dot-blink 1.1s ease-in-out infinite;
+}
+
+/* Ecualizador visible mientras la voz está hablando */
+.eq-bar {
+  display: inline-block;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--sky);
+  animation: eq 1s ease-in-out infinite;
+}
+@keyframes eq {
+  0%, 100% { height: 5px; opacity: 0.5; }
+  50%      { height: 18px; opacity: 1; }
+}
+
+/* Aparición al hacer scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* La respuesta "llega" con una suave entrada */
+@keyframes answer-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.answer-in {
+  animation: answer-in 0.45s ease both;
+}
+
+/* Botones fijos: realce al pasar el cursor */
+.ctrl-btn {
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+.ctrl-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+.ctrl-btn:not(:disabled):active {
+  transform: translateY(0) scale(0.985);
+}
+.ctrl-btn:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+/* ---------- Estados de fase ---------- */
+
+/* Estado: idle */
+.idle-dot {
+  animation: dot-blink 1.1s ease-in-out infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--mut);
+  border-radius: 50%;
+}
+
+/* Estado: starting */
+.starting-dot {
+  animation: dot-blink 1.1s ease-in-out infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+
+/* Estado: recording */
+.recording-dot {
+  animation: dot-blink 1.1s ease-in-out infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--cyan);
+  border-radius: 50%;
+}
+
+/* Estado: paused */
+.paused-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--cyan-dark);
+  border-radius: 50%;
+}
+
+/* Estado: sending */
+.sending-dot {
+  animation: dot-blink 1.1s ease-in-out infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+
+/* Estado: processing */
+.processing-dot {
+  animation: dot-blink 1.1s ease-in-out infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--cyan-dark);
+  border-radius: 50%;
+}
+
+/* Estado: speaking */
+.speaking-dot {
+  animation: dot-blink 1.1s ease-in-out infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+
+/* Estado: voicePaused */
+.voicePaused-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+
+/* ---------- Texto y títulos ---------- */
+
+.text-ocre {
+  color: var(--ink);
+}
+
+.text-ocre-subtle {
+  color: var(--mut);
+}
+
+.bg-ocre-dark {
+  background-color: var(--bg);
+}
+
+.bg-panel-dark {
+  background-color: var(--panel);
+}
+
+.border-ocre {
+  border-color: var(--line);
+}
+
+/* ---------- Encabezado ---------- */
+
+header {
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Controles ---------- */
+
+.ctrl-btn.border-ocre {
+  border: 1px solid var(--line);
+  background-color: var(--panel);
+}
+
+.ctrl-btn.border-ocre:hover {
+  border-color: var(--cyan);
+}
+
+/* ---------- Puntuación y indicadores ---------- */
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---------- Área de respuesta ---------- */
+
+.response-text {
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ---------- Errores ---------- */
+
+.error-box {
+  border-left: 3px solid var(--cyan);
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--ink);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+/* ---------- Bitácora ---------- */
+
+.history-item {
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+/* ---------- Configuración ---------- */
+
+.setting-item {
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 768px) {
+  .gem-bg {
+    background:
+      radial-gradient(800px 500px at 20% -10%, rgba(207, 250, 254, 0.07), transparent 50%),
+      radial-gradient(600px 400px at 80% 90%, rgba(56, 189, 248, 0.06), transparent 50%),
+      var(--bg);
+  }
+}

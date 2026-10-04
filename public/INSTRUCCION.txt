@@ -1,0 +1,42 @@
+INSTRUCCIONES DE USO — Asistente 91
+=====================================================
+
+Materia: Neuropsicología
+Código: 91
+Cátedra: Politis — Prof. Dr. Daniel Gustavo Politis
+Facultad: Psicología, Universidad de Buenos Aires (UBA)
+
+Qué hace este tutor:
+  Asistente académico por voz. Escuchá una pregunta formulada oralmente
+    (Multiple Choice, Verdadero/Falso o completar oraciones) sobre los
+    contenidos de la Cátedra Politis, busca la respuesta en los PDFs
+    provistos y devuelve un análisis estructurado en los formatos
+    oficiales de la materia. Pensado para preparar exámenes presenciales
+    con viñetas clínicas, disociaciones, diagnóstico diferencial y
+    pruebas neuropsicológicas específicas.
+
+Cómo se usa:
+  1. Pegá tu API Key de Gemini en el panel "Configuración" (esquina
+     inferior derecha). También podés fijarla como variable de entorno
+     VITE_GEMINI_API_KEY.
+  2. Tocá "Grabar" y formulá tu pregunta en voz alta. Podés pausar y
+     reanudar para releer; todo se acumula en un único clip.
+  3. Tocá "Enviar". La respuesta aparece escrita y se lee en voz alta
+     automáticamente.
+  4. La respuesta queda en la bitácora de la sesión y se guarda
+     automáticamente como archivo .txt en la carpeta qa-logs/ del
+     repositorio (segundo plano, sin interrumpir).
+
+Atajos:
+  · Botón 3 (Play/Pausa voz): pausar/reanudar la lectura de la
+    respuesta actual.
+
+Avisos:
+  · El tutor responde exclusivamente con la bibliografía de la cátedra
+    (01.NPS_1P.pdf + 02.NPS_2P.pdf). Si le preguntás algo fuera del
+    programa, va a contestar que no está en los PDFs cargados.
+  · Las preguntas formuladas por voz se transcriben antes de enviarse
+    a Gemini (para que queden en el log).
+  · El guardado automático en GitHub requiere un token con permiso
+    de Contents: read+write sobre este repo (configurado como
+    VITE_GITHUB_TOKEN en los Secrets del repo).
